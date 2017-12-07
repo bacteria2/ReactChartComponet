@@ -1,0 +1,77 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.axis .icon-dot{
+  background:url("image/dot.png") no-repeat 
+}
+.axis .icon-play{
+  background:url("image/play.png") no-repeat 50% 50%
+}
+.axis .icon-pause{
+  background:url("image/pause.png") no-repeat  50% 50%
+}
+.axis .icon-selected{
+  background:url("image/selected.png") no-repeat 
+}
+.axis .icon-line{
+  background: url("image/line.png") no-repeat
+}
+
+.axis,.axis-container{
+  display: flex;
+  flex-wrap: nowrap;
+  height:30px;
+  line-height: 30px;
+  padding:4px;
+}
+
+.axis .axis-controll{
+  padding: 0 6px;
+ 
+  width: 56px; 
+  height:100%;
+}
+.axis-play,.axis-pause{
+  display: block;
+  margin: auto;
+  width: 28px;
+  height:28px; 
+}
+.axis-play:hover,.axis-pause:hover{
+  cursor: pointer;
+}
+
+.axis .axis-tick-group{
+  display: flex;
+  flex-wrap: nowrap;
+  height: 100%;
+  background-size: 100% 2px;
+  background-position: 50%;
+}
+
+.axis .axis-tick{
+  width:46px;
+}
+.axis .axis-tick:hover{
+  cursor: pointer;
+}
+.axis .axis-tick.last{
+  width:14px;
+}
+
+.axis .axis-tick .icon-dot{
+  display: block;
+  width: 30px;
+  height:30px;
+  background-position-y: 50%;
+}
+
+.axis .axis-selected{
+  height: 100%;
+  width:46px;
+  display: inline-block;
+  position: absolute;
+}
