@@ -26,26 +26,31 @@ const size = {
     small: {
         height: 23,
         width: '16px',
-        fontSize: '21px',
-        wrapMargin:'0 2px',
+        fontSize: '21px',    
         dotHeight:'12px',
-        dotFontSize:'36px'
+        dotFontSize:'36px',
+        background:'#4d9ebb',
+        margin:'0 5px'
     },
     'default': {
         height: 38,
         width: '24px',
         fontSize: '34px',
-        wrapMargin:'0 5px',
         dotHeight:'28px',
-        dotFontSize:'50px'
+        dotFontSize:'50px',
+        background:'#4d9ebb',
+        margin:'0 5px',
+        background:'#4d9ebb',
+        margin:'0 5px'
     },
     big: {
         height: 52,
         width: '36px',
-        fontSize: '45px',
-        wrapMargin:'0 7px',
+        fontSize: '45px',    
         dotHeight:'41px',
-        dotFontSize:'67px'
+        dotFontSize:'67px',
+        background:'#4d9ebb',
+        margin:'0 5px'
     }
 }
 
@@ -59,10 +64,10 @@ let previousBottomAndShadow = 'z-index: 1;',
         border-radius: 4px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
         border: 1px solid #111111;
-       ${props => !props.pre ? 'background-color: #4d9ebb;' : 'background-color: #6a909e;'}       
+       ${props => !props.pre ? `background-color: ${props.background};` : 'background-color: #6a909e;'}       
         width: ${({width})=>width};
         display: inline-block;        
-        margin:${({wrapMargin})=>wrapMargin};
+        margin:${({margin})=>margin};
         position:relative;`,
     DigitBase = styled.div`  
         position:absolute;
@@ -72,7 +77,7 @@ let previousBottomAndShadow = 'z-index: 1;',
         box-sizing: border-box;
         width:${({width})=>width};
         overflow:hidden;
-        ${props => !props.pre ? 'background-color: #4d9ebb;' : 'background-color: #6a909e;'}  
+        ${props => !props.pre ? `background-color: ${props.background};` : 'background-color: #6a909e;'}  
         border-bottom:1px solid #195072;`,
     DigitBox = DigitBase.extend`
        &.top{
@@ -151,26 +156,26 @@ class Digit extends React.PureComponent {
         }
     }
 
-    render() {
-        let sizeAttr=size[this.props.size==='small'?'small':this.props.size==='big'?'big':"default"];
-        let attrs={
-            pre:Number.isNaN(this.state.activeIndex),
-            ...sizeAttr
+    render() {   
+        let commonStyle={
+            pre:Number.isNaN(this.state.activeIndex),           
+            ...this.props.commonStyle
         }
+        
         return (
-            <DigitWrap {...attrs}>
+            <DigitWrap {...commonStyle}>
                 { NumberList.map(number =>
                     <AnimeContainer
                         className={this.state.activeIndex === number ? "active" : this.state.previousIndex === number ? "previous" : ""}
                         key={'number' + number}>
-                        <DigitBox {...attrs} top className="top">
-                            <span>{attrs.pre ? 0 : number}</span>
+                        <DigitBox {...commonStyle} top className="top">
+                            <span>{commonStyle.pre ? 0 : number}</span>
                         </DigitBox>
-                        {!attrs.pre && <DigitShadow top className="top"/>}
-                        <DigitBox {...attrs} bottom className="bottom">
-                            <span>{attrs.pre ? 0 : number}</span>
+                        {!commonStyle.pre && <DigitShadow top className="top"/>}
+                        <DigitBox {...commonStyle} bottom className="bottom">
+                            <span>{commonStyle.pre ? 0 : number}</span>
                         </DigitBox>
-                        <DigitShadow {...attrs} bottom className="bottom"/>
+                        <DigitShadow {...commonStyle} bottom className="bottom"/>
                     </AnimeContainer>
                 )
                 }
@@ -179,19 +184,25 @@ class Digit extends React.PureComponent {
     }
 }
 
+Digit.defaultProps={
+    number:0,
+    commonStyle:size['defualt']
+}
+Digit.propTypes={
+    commonStyle:PropTypes.object,
+    number:PropTypes.oneOfType([PropTypes.string,PropTypes.number])
+}
+
 
 let Dot = DigitWrap.extend`
     &:before{
       content: '.';
       position: absolute;
-      font-size:${({dotFontSize})=>dotFontSize};
+      font-size:${({commonStyle})=>commonStyle.dotFontSize};
       color: white;
       text-align: center;
-      line-height: ${({dotHeight})=>dotHeight};
-    }`,
-    RollingWrapper = styled.div`
-       
-    `
+      line-height: ${({commonStyle})=>commonStyle.dotHeight};
+    }`;
 
 /**
  * 数字滚动变化模块
@@ -201,11 +212,16 @@ let Dot = DigitWrap.extend`
 
 class RollingNumber extends React.PureComponent {
     constructor(props) {
-        super(props);
+        super(props); 
+        
         this.state = {
             intValue: this.intValueSubStr(props.value),
             decimalValue: this.decimalValueSubStr(props.value)
         }
+    }
+
+    mergeStyle(style,sizeType='default'){
+        return Object.assign({},size[sizeType],style);
     }
 
     componentWillReceiveProps({value}) {
@@ -268,28 +284,41 @@ class RollingNumber extends React.PureComponent {
     /**
      * 根据length和fix生成面板
      * */
-    digitGenerator(length, fix) {
+    digitGenerator(length, fix,commonStyle) {
         let list = [];
         if (length > 0) {
             for (let i = 0; i < length; i++) {
-                list.push(<Digit size={this.props.size} number={this.state.intValue.get(i, 0)} key={'intValue' + i}/>)
+                list.push(
+                   <Digit 
+                      commonStyle={commonStyle}                       
+                      number={this.state.intValue.get(i, 0)} 
+                      key={'intValue' + i}/>)
             }
         }
         if (fix > 0) {
-            let sizeAttr=size[this.props.size==='small'?'small':this.props.size==='big'?'big':"default"]
-            list.push(<Dot {...sizeAttr} key="dot" />)
+           
+            list.push(
+                  <Dot 
+                     commonStyle={commonStyle} 
+                     key="dot" />)
+            
             for (let i = 0; i < this.props.fixed; i++) {
-                list.push(<Digit size={this.props.size} number={this.state.decimalValue.get(i, 0)} key={'decimal' + i}/>)
+                list.push(
+                  <Digit 
+                    commonStyle={commonStyle} 
+                    number={this.state.decimalValue.get(i, 0)} key={'decimal' + i}/>)
             }
         }
         return list
     }
 
     render() {
+        let commonStyle=this.mergeStyle(this.props.style,this.props.size)
+        console.log(commonStyle);
         return (
-            <RollingWrapper>
-                {this.digitGenerator(this.props.length, this.props.fixed)}
-            </RollingWrapper>)
+            <div>
+                {this.digitGenerator(this.props.length, this.props.fixed,commonStyle)}
+            </div>)
     }
 }
 
@@ -297,14 +326,17 @@ RollingNumber.defaultProps = {
     length: 4,
     value: '0000',
     fixed: 0,
-    unit: ""
+    unit: "",
+    size:'default',    
 }
 
 RollingNumber.propTypes = {
     length: PropTypes.number,
     value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     fixed: PropTypes.number,
-    unit: PropTypes.string
+    unit: PropTypes.string,
+    size:PropTypes.oneOf(['small','big','default']),
+    style:PropTypes.object
 }
 
 export default RollingNumber

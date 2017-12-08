@@ -1,22 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Axis from './Axis';
+import RollingNumberWrapper from './Tools/RollingNumber';
+import TimeAxis from './Tools/TimeAxis';
 import './index.css';
 
-export default class TimeAxis {
-    render(){
-        ReactDOM.render(<Axis />, document.getElementById('timeAxis'));
+export default class Toolkit {
+    static newRollingNumber(el,config){
+        return new RollingNumberWrapper(el,config);
+    } 
+    static newTimeAxis(el,config){
+        return new TimeAxis(el,config);
     }
-
 }
 
-window.TimeAxis=TimeAxis;
 
-let axis=new TimeAxis({
-    controlls:true,
-    arrow:true,
-    tickWidth:6,
-    series:[],
-})
-
-axis.render();
+window.Toolkit=Toolkit;
