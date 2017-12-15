@@ -9,8 +9,11 @@
         position: absolute;
         margin: 0 auto;
         border: 1px solid red;
-        left:120px;
-        top:120px;      
+        left:320px;
+        top:20px;      
+      }
+      #pie{
+        background: #0f2067;
       }
     </style>
   </head>
@@ -18,10 +21,13 @@
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
+    <button onclick='openWin()'>open</button>
     <div id="timeAxis"></div>
     <div id='small'></div>
     <div id='default'></div>
-    <div id='big'></div>
+    <div id='big' style="background:#ababab"></div>
+    <div id='pie' ></div>
+  
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -36,47 +42,82 @@
 
 </html>
 <script>
-    // let small= Toolkit.newRollingNumber(document.getElementById('small'),{       
-    //    length:8,
-    //    value:100,
-    //    size:'small'
-    //  });
-    //  let normal= Toolkit.newRollingNumber(document.getElementById('default'),{       
-    //    length:8,
-    //    value:200,
-    //    style:{ 
-    //      margin:'0'
-    //    }
-    //  });
-    //  let big= Toolkit.newRollingNumber(document.getElementById('big'),{       
-    //    length:8,
-    //    value:300,
-    //    size:'big',
-    //    style:{
-    //     background:'#166899'
-    //    }      
-    //  });
-
-     let timeAxis=Toolkit.newTimeAxis(document.getElementById('timeAxis'),{
-       ticks:[
-        {text:"1000",click(){console.log(1)}},
-        {text:"2000",click(){console.log(21)}},
-        {text:"3000",click(){console.log(31)}},
-        {text:"4000",click(){console.log(41)}},
-        {text:"5000",click(){console.log(51)}},
-        {text:"6000",click(){console.log(61)}}
-      ],
-       tickWidth:96,
-       axisStyle:{
-         fontColor:"blue",
-         marginLeft:'-15px'
-       }
+   function openWin(){  
+      console.log('open')
+      small.open();
+   
+   }
+    let small= Toolkit.newDraggableWin(document.getElementById('small'),{       
+       play:function(){console.log('play')},
+       boatInfo:function(){console.log('boatInfo')},
+       x:200,
+       y:180,
+       showWin:false,
+     });
+     small.update({
+       shipName:'珠湾3589',
+       phone:'13847476123',
+       owner:'梁金彩',
+       AreaType:'海洋',
+       AdminType:'港澳渔船', 
+       shipType:'捕捞渔船',
+       belongTo:'香洲区' ,
+       shipNum:'4404031997081001'
      })
-     
-    //  setInterval(
-    //    function(){
-    //       small.update(Math.round(5000*Math.random()));
-    //       normal.update(Math.round(5000*Math.random()));
-    //       big.update(Math.round(5000*Math.random()))
-    //  },5000)
+    
+    //  let search=Toolkit.newSearch(document.getElementById('default'),{
+    //    data:[]
+    //  });
+    //  search.setData([{
+    //    shipName:'2539',
+    //    phone:'13847476123',
+    //    owner:'梁金彩',
+    //    AreaType:'海洋',
+    //    AdminType:'港澳渔船', 
+    //    shipType:'捕捞渔船',
+    //    belongTo:'香洲区' ,
+    //    shipNum:'4404031997081001'
+    //  },{
+    //    shipName:'4589',
+    //    phone:'13847476123',
+    //    owner:'梁金彩',
+    //    AreaType:'海洋',
+    //    AdminType:'港澳渔船', 
+    //    shipType:'捕捞渔船',
+    //    belongTo:'香洲区' ,
+    //    shipNum:'4404031997081001'
+    //  },{
+    //    shipName:'3589',
+    //    phone:'13847476123',
+    //    owner:'梁金彩',
+    //    AreaType:'海洋',
+    //    AdminType:'港澳渔船', 
+    //    shipType:'捕捞渔船',
+    //    belongTo:'香洲区' ,
+    //    shipNum:'4404031997081001'
+    //  }])
+     let gauge=Toolkit.newGauge(document.getElementById('big'),{
+       color: "#223300",
+       strokeColor:"#ffd900",
+       strokeWidth:2,
+       size: 154,
+       value:10,
+     })
+    // gauge.update(0.1)
+     setInterval(function(){gauge.update(100*Math.random())},5000)
+
+    //timeAxis 
+    let timeAxis =Toolkit.newTimeAxis(document.getElementById('timeAxis'),{
+      ticks:[
+        {text:"6时",click(){console.log(1)}},
+        {text:"8时",click(){console.log(2)}},
+        {text:"10时",click(){console.log(3)}},
+        {text:"12时",click(){console.log(4)}},
+        {text:"14时",click(){console.log(5)}},
+        {text:"16时",click(){console.log(6)}}
+      ],
+      tickWidth:60,
+    })
+    //Pie
+    let pie=Toolkit.newPie(document.getElementById('pie'),{})
    </script>

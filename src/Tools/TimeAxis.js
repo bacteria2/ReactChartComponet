@@ -4,7 +4,7 @@ import Bridge from './Bridge';
 import TimeAxis from '../components/TimeAxis'
 
 
-export default class RollingNumberWrapper{
+export default class TimeAxisWrapper{
     constructor(el,config={}){
         if(!el)
           throw new Error("el is null,please specified an element container")
