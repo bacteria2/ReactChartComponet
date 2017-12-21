@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import RollingNumberWrapper from './Tools/RollingNumber';
 import TimeAxis from './Tools/TimeAxis';
 import DragWin from './Tools/DragWin';

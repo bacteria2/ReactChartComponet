@@ -1,5 +1,5 @@
 import React from 'react';
-;
+
 
 export default class Bridge extends React.PureComponent{
     constructor(props){
@@ -14,8 +14,8 @@ export default class Bridge extends React.PureComponent{
     }
 
     render(){
-        let Tool=this.props.Tool    
-        return <Tool {... this.state}/>;
+        let Tool=this.props.Tool
+        return <Tool {...this.state}/>;
     }
 
 }

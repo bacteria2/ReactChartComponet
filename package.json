@@ -94,5 +94,6 @@
   "homepage": "./",
   "eslintConfig": {
     "extends": "react-app"
-  }
+  },
+  "main": "src/index.js"
 }
