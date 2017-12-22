@@ -1,7 +1,3 @@
-import React from 'react'
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
-import Bridge from '../Bridge';
 import { arc, pie, line} from 'd3-shape';
 import { interpolate} from "d3-interpolate";
 import { select} from "d3-selection";
@@ -18,12 +14,13 @@ function midAngle(d) {
 function D3Pie({
     legend,
     title,
-    height,
-    width,
-    colorList,
-    series,
-    id,
-    data
+    height=400,
+    width=400,
+    colorList=['#ffaa26', '#ffbbaa', '#aa3fff', "#addc11", "#fff"],
+    series=["测试是咧1","测试是咧1","测试是咧1c","测试是咧1d","测试是咧1e"],
+    id='t'+new Date().getTime(),
+    data=[10, 20, 30, 40, 50],
+    el
 }) {
     let size=Math.min(height,width)/2;
 
@@ -47,7 +44,10 @@ function D3Pie({
     let pieFunc = pie()
         .padAngle(0.04);
 
-    let svg = select("#simplePie")
+    //clear
+    select(el).select('svg').remove();
+    let svg = select(el)
+        //.remove('svg')
         .append('svg')
         .attr('width', width)
         .attr('height', height)
@@ -300,62 +300,17 @@ function D3Pie({
 
 }
 
-class SimplePie extends React.PureComponent {
-    constructor(props) {
-        super(props)
-        if (props.bindWrapper) {
-            props.bindWrapper(this);
-        }
-    }
-
-    componentDidMount() {
-        D3Pie(this.props)
-    }
-
-    render() {
-        return <div id = 'simplePie' />
-    }
-
-
-
-}
-
-SimplePie.defaultProps={
-    height:400,
-    width:500,
-    data:[10, 20, 30, 40, 50],
-    colorList:['#ffaa26', '#ffbbaa', '#aa3fff', "#addc11", "#fff"],
-    series:["测试是咧1","测试是咧1","测试是咧1c","测试是咧1d","测试是咧1e"],
-    id:'t'+new Date().getTime()
-}
-
-SimplePie.propTypes={
-    height:PropTypes.number,
-    width:PropTypes.number,
-    data:PropTypes.array,
-    colorList:PropTypes.array,
-    series:PropTypes.array,
-    id:PropTypes.number,
-}
-
 export default class SimplePieWrapper {
     constructor(el, config = {}) {
        if (!el)
            throw new Error("el is null,please specified an element container")
-       if (typeof el == 'string')
-           ReactDOM.render(<Bridge wrapper={this} config={config} Tool={SimplePie} />, document.getElementById(el));
-                else
-           ReactDOM.render(<Bridge wrapper={this} config={config} Tool={SimplePie} />, el);
-    }
-
-    registry = ins => this.instance = ins
-
-    update(value) {
-        if (this.bridge)
-           this.bridge.setState({value})
-    }
+       this.el=el;
+       D3Pie({...config,el});
+      
+    }   
         
-    setOption(option){
-        this.bridge.setState(option) 
+    setOption=(option)=>{
+        let el=this.el;
+        D3Pie({...option,el});
     }
 }

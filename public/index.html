@@ -15,6 +15,10 @@
       #pie{
         background: #0f2067;
       }
+      #echarts{
+        width: 400px;
+        height:400px;
+      }
     </style>
   </head>
   <body>
@@ -27,7 +31,7 @@
     <div id='default'></div>
     <div id='big' style="background:#ababab"></div>
     <div id='pie' ></div>
-  
+    <div id='echarts' ></div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -120,4 +124,24 @@
     })
     //Pie
     let pie=Toolkit.newPie(document.getElementById('pie'),{width:400,height:300,title:{fontSize:28},legend:{show:false,position:'left',vertical:true,xDiff:20,yDiff:20}})
+    
+    let echars=Toolkit.newEcharts(document.getElementById('echarts'),{
+      title: {
+                text: 'ECharts 入门示例'
+            },
+            tooltip: {},
+            legend: {
+                data:['销量']
+            },
+            xAxis: {
+                data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+            },
+            yAxis: {},
+            series: [{
+                name: '销量',
+                type: 'bar',
+                data: [5, 20, 36, 10, 10, 20]
+            }]
+    })
+   
    </script>
