@@ -12,7 +12,10 @@ export default class TimeAxisWrapper{
           ReactDOM.render(<Bridge wrapper={this} config={config} Tool={Search} />, document.getElementById(el));
         else
           ReactDOM.render(<Bridge wrapper={this} config={config} Tool={Search} />, el);
+
+
     }
+
 
     registry(bridge){
        this.bridge=bridge;

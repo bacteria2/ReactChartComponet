@@ -3,7 +3,6 @@ import { interpolate} from "d3-interpolate";
 import { select} from "d3-selection";
 import { transition} from 'd3-transition';
 import './pie.css';
-import { fail } from 'assert';
 
 
 
@@ -17,9 +16,13 @@ function D3Pie({
     height=400,
     width=400,
     colorList=['#ffaa26', '#ffbbaa', '#aa3fff', "#addc11", "#fff"],
-    series=["测试是咧1","测试是咧1","测试是咧1c","测试是咧1d","测试是咧1e"],
+    series=["测试","测试1","测试1c","测试1d","测试1e"],
     id='t'+new Date().getTime(),
     data=[10, 20, 30, 40, 50],
+    position:{
+        xDiff=0,
+        yDiff=0,
+    }={},
     el
 }) {
     let size=Math.min(height,width)/2;
@@ -54,7 +57,7 @@ function D3Pie({
         //.attr('viewBox', `0 0 ${height} ${width}`);
 
 
-    let pieGroup = svg.append('g').attr('transform', `translate(${size},${size})`);
+    let pieGroup = svg.append('g').attr('transform', `translate(${size+xDiff},${size+yDiff})`);
     let arcGroup=pieGroup.append('g');
     //draw arc
     drawArc(arcGroup)
@@ -169,7 +172,9 @@ function D3Pie({
                 return [arcInstance.centroid(d), outArc.centroid(d), pos]
             }).attr('stroke', function (d, i) {
                 return colorList[i];
-            }).select(function () {
+            })
+            .attr('fill','transparent')
+            .select(function () {
                 return this.parentNode
             })
             // lineGroup.selectAll('text').data(pieFunc(data)).enter()
@@ -215,25 +220,24 @@ function D3Pie({
     function drawLegend(svg, {
         position = 'bottom',
         vertical = false,
-        xDiff,
-        yDiff,
+        fontSize=16,
+        xDiff=0,
+        yDiff=0,
         show=true,
+        rectHeight = 12,
+        rectWidth=20,
+        spacing = 8,
+        gapBetween = 2
     } = {}) {
         if(!show){
            return 
-        }
-        let legendRectHeight = 12,
-            legendRectWidth=20,
-            legendSpacing = 8,
-            gapBetweenGroups = 10;
-        //diff
-        let arcXTranslate=xDiff?xDiff:legendRectWidth  ,arcYTranslate=yDiff?yDiff:legendRectHeight+legendSpacing;
-
+        }        
+      
         let startPoint={
-            top:[0,-size,xDiff?xDiff:0,arcYTranslate],
-            bottom:[0,size*0.55,xDiff?xDiff:0,-arcYTranslate],
-            left:[-size,-size*0.75,arcXTranslate*2,yDiff?yDiff:0],
-            right:[size*0.55,-size*0.75,-arcXTranslate,yDiff?yDiff:0]};
+            top:[0+xDiff,-size+yDiff],
+            bottom:[0+xDiff,size*0.55+yDiff],
+            left:[-size+xDiff,-size*0.75+yDiff],
+            right:[size*0.55+xDiff,-size*0.75+yDiff]};
 
         let start=startPoint[position];
         let legend = svg.selectAll('.legend')
@@ -241,26 +245,24 @@ function D3Pie({
             .enter()
             .append('g')
             .attr('transform', function (d, i) {                
-                let height = legendRectWidth + legendSpacing;
-                let offset = -gapBetweenGroups / 2;
+                let height = rectWidth + spacing;               
                 let horz;
                 let vert;               
                 if(vertical){
-                    horz = start[0] + 40 - legendRectWidth;
-                    vert = start[1] + i * height - offset;
+                    horz = start[0] + 40 - rectWidth;
+                    vert = start[1] + i * (height + gapBetween);
                 }else{
-                    let diff=(series.length+1)*legendRectWidth;
-
-                    horz = start[0] -diff + i * height*2 - offset;
-                    vert = start[1] + 40 - legendRectHeight;
+                    let diff=(series.length)*rectWidth;
+                    horz = start[0] -diff + i *2 * (rectWidth + gapBetween);
+                    vert = start[1] + 40 - rectHeight;
                 }
               
                 return 'translate(' + horz + ',' + vert + ')';
             });
 
         legend.append('rect')
-            .attr('width', legendRectWidth)
-            .attr('height', legendRectHeight)
+            .attr('width', rectWidth)
+            .attr('height', rectHeight)
             .style('fill', function (d, i) {
                 return `url("#${id}pieLinearGradient${i}")`;
             })
@@ -271,13 +273,14 @@ function D3Pie({
         legend.append('text')
             .attr('class', 'legend')
             .attr('fill', "#4fbbfd")
-            .attr('x', legendRectWidth + legendSpacing)
-            .attr('y', legendRectHeight)
+            .attr('x', rectWidth + spacing)
+            .attr('y', rectHeight)
+            .style('font-size',fontSize)
             .text(function (d) {
                 return d;
             });
         //arcGroup的偏移
-        arcGroup.attr('transform', `translate(${start[2]},${start[3]})`)
+        //arcGroup.attr('transform', `translate(${start[2]},${start[3]})`)
     }
 
     function arcTween(outerRadius, delay, text) {

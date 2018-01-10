@@ -20,12 +20,16 @@
         height:400px;
       }
     </style>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+   
   </head>
   <body>
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
     <button onclick='openWin()'>open</button>
+    <div id='rollingNumber'></div>
     <div id="timeAxis"></div>
     <div id='small'></div>
     <div id='default'></div>
@@ -51,56 +55,38 @@
       small.open();
    
    }
-    let small= Toolkit.newDraggableWin(document.getElementById('small'),{       
-       play:function(){console.log('play')},
-       boatInfo:function(){console.log('boatInfo')},
-       x:200,
-       y:180,
-       showWin:false,
-     });
-     small.update({
-       shipName:'珠湾3589',
-       phone:'13847476123',
-       owner:'梁金彩',
-       AreaType:'海洋',
-       AdminType:'港澳渔船', 
-       shipType:'捕捞渔船',
-       belongTo:'香洲区' ,
-       shipNum:'4404031997081001'
-     })
-    
-    //  let search=Toolkit.newSearch(document.getElementById('default'),{
-    //    data:[]
-    //  });
-    //  search.setData([{
-    //    shipName:'2539',
-    //    phone:'13847476123',
-    //    owner:'梁金彩',
-    //    AreaType:'海洋',
-    //    AdminType:'港澳渔船', 
-    //    shipType:'捕捞渔船',
-    //    belongTo:'香洲区' ,
-    //    shipNum:'4404031997081001'
-    //  },{
-    //    shipName:'4589',
-    //    phone:'13847476123',
-    //    owner:'梁金彩',
-    //    AreaType:'海洋',
-    //    AdminType:'港澳渔船', 
-    //    shipType:'捕捞渔船',
-    //    belongTo:'香洲区' ,
-    //    shipNum:'4404031997081001'
-    //  },{
-    //    shipName:'3589',
-    //    phone:'13847476123',
-    //    owner:'梁金彩',
-    //    AreaType:'海洋',
-    //    AdminType:'港澳渔船', 
-    //    shipType:'捕捞渔船',
-    //    belongTo:'香洲区' ,
-    //    shipNum:'4404031997081001'
-    //  }])
-     let gauge=Toolkit.newGauge(document.getElementById('big'),{
+   let rollingNumber=Toolkit.RollingNumber(document.getElementById('rollingNumber'),{
+    length: 7,
+    value: '10000.01',
+    fixed: 2    
+    });
+   setInterval(function(){
+     rollingNumber.update(Math.random()*1000)
+    },5000) 
+   let charts=Toolkit.Charts()
+   charts
+   .then(charts=>charts.init(document.getElementById('echarts')))
+   .then(instance=>instance.setOption({
+       title: {
+           text: 'ECharts 入门示例'
+       },
+       tooltip: {},
+       legend: {
+           data:['销量']
+       },
+       xAxis: {
+           data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+       },
+       yAxis: {},
+       series: [{
+           name: '销量',
+           type: 'bar',
+           data: [5, 20, 36, 10, 10, 20]
+       }]
+   }))
+  
+  
+     let gauge=Toolkit.Gauge(document.getElementById('big'),{
        color: "#223300",
        strokeColor:"#ffd900",
        strokeWidth:2,
@@ -111,7 +97,7 @@
      setInterval(function(){gauge.update(100*Math.random())},5000)
 
     //timeAxis 
-    let timeAxis =Toolkit.newTimeAxis(document.getElementById('timeAxis'),{
+    let timeAxis =Toolkit.TimeAxis(document.getElementById('timeAxis'),{
       ticks:[
         {text:"6时",click(){console.log(1)}},
         {text:"8时",click(){console.log(2)}},
@@ -123,25 +109,20 @@
       tickWidth:60,
     })
     //Pie
-    let pie=Toolkit.newPie(document.getElementById('pie'),{width:400,height:300,title:{fontSize:28},legend:{show:false,position:'left',vertical:true,xDiff:20,yDiff:20}})
+    let pie=Toolkit.Pie(document.getElementById('pie'),{
+      width:280,
+      height:200,
+      title:{fontSize:16},
+      
+      legend:{
+        show:true,
+        position:'bottom',
+        vertical:false,
+        fontSize:14,
+        xDiff:20,
+        yDiff:0}}
+    )
     
-    let echars=Toolkit.newEcharts(document.getElementById('echarts'),{
-      title: {
-                text: 'ECharts 入门示例'
-            },
-            tooltip: {},
-            legend: {
-                data:['销量']
-            },
-            xAxis: {
-                data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-            },
-            yAxis: {},
-            series: [{
-                name: '销量',
-                type: 'bar',
-                data: [5, 20, 36, 10, 10, 20]
-            }]
-    })
+
    
    </script>

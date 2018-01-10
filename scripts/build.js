@@ -147,4 +147,9 @@ function copyPublicFolder() {
     dereference: true,
     filter: file => file !== paths.appHtml,
   });
+    fs.copySync(require.resolve('../README.md'), paths.appBuild+'/README.md', {
+        dereference: true,
+    });
 }
+
+

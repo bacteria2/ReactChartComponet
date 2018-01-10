@@ -3,7 +3,7 @@ React图表组件
 
 ## 1.时间轴<br>
 - 初始化<br>
-Toolkit.newTimeAxis(el,config)
+Toolkit.TimeAxis(el,config)
 - 配置参数
 ```
   ticks:节点
@@ -19,7 +19,7 @@ Toolkit.newTimeAxis(el,config)
 - 方法
 ## 2.油量表<br>
 - 初始化<br>
-Toolkit.newGauge(el,config)
+Toolkit.Gauge(el,config)
 - 配置参数
 ```
  size:表盘区域大小
@@ -35,15 +35,17 @@ Toolkit.newGauge(el,config)
 
 ## 3.滚动数字<br>
 - 初始化<br>
-Toolkit.newRollingNumber(el,config)
+Toolkit.RollingNumber(el,config)
 - 配置
 ```
 length 面板数字长度(整数部分)
 value: 输入值,
-type:面板类型,
 fix:小数点保留位数
 ```
 - 方法
 ```
 ```
 ## 4.可拖动窗口<br>
+
+## 5.Echart图表
+- 初始化<br>

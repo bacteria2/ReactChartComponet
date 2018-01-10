@@ -56,17 +56,17 @@ module.exports = {
   // You can exclude the *.map files from the build during deployment.
   devtool: shouldUseSourceMap ? 'source-map' : false,
   // In production, we only want to load the polyfills and the app code.
-  entry: [require.resolve('./polyfills'), paths.appIndexJs],
+  entry: [require.resolve('./polyfills'),paths.appIndexJs],
   output: {
     // The build folder.
     path: paths.appBuild,
     // Generated JS file names (with nested folders).
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
-    filename: 'static/js/[name].[chunkhash:8].js',
+    filename: '[name].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
-    publicPath: publicPath,
+    publicPath: "",
     // Point sourcemap entries to original disk location (format as URL on Windows)
     devtoolModuleFilenameTemplate: info =>
       path
@@ -167,51 +167,47 @@ module.exports = {
           // in the main CSS file.
           {
             test: /\.css$/,
-            loader: ExtractTextPlugin.extract(
-              Object.assign(
-                {
-                  fallback: {
-                    loader: require.resolve('style-loader'),
+            use: [
+                  {
+                    loader: 'style-loader',
                     options: {
                       hmr: false,
                     },
                   },
-                  use: [
-                    {
-                      loader: require.resolve('css-loader'),
-                      options: {
-                        importLoaders: 1,
-                        minimize: true,
-                        sourceMap: shouldUseSourceMap,
-                      },
+                  {
+                    loader: 'css-loader',
+                    options: {
+                      importLoaders: 1,
+                      minimize: true,
+                      sourceMap: shouldUseSourceMap,
                     },
-                    {
-                      loader: require.resolve('postcss-loader'),
-                      options: {
-                        // Necessary for external CSS imports to work
-                        // https://github.com/facebookincubator/create-react-app/issues/2677
-                        ident: 'postcss',
-                        plugins: () => [
-                          require('postcss-flexbugs-fixes'),
-                          autoprefixer({
-                            browsers: [
-                              '>1%',
-                              'last 4 versions',
-                              'Firefox ESR',
-                              'not ie < 9', // React doesn't support IE8 anyway
-                            ],
-                            flexbox: 'no-2009',
-                          }),
-                        ],
-                      },
+                  },
+                  {
+                    loader: 'postcss-loader',
+                    options: {
+                      // Necessary for external CSS imports to work
+                      // https://github.com/facebookincubator/create-react-app/issues/2677
+                      ident: 'postcss',
+                      plugins: () => [
+                        require('postcss-flexbugs-fixes'),
+                        autoprefixer({
+                          browsers: [
+                            '>1%',
+                            'last 4 versions',
+                            'Firefox ESR',
+                            'not ie < 9', // React doesn't support IE8 anyway
+                          ],
+                          flexbox: 'no-2009',
+                        }),
+                      ],
                     },
-                  ],
-                },
-                extractTextPluginOptions
-              )
-            ),
-            // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+                  },
+                ],
           },
+             
+            
+            // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+       
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
           // This loader doesn't use a "test" so it will catch all modules
@@ -282,11 +278,11 @@ module.exports = {
         ascii_only: true,
       },
       sourceMap: shouldUseSourceMap,
-    }),
+    }),  
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-    new ExtractTextPlugin({
-      filename: cssFilename,
-    }),
+    // new ExtractTextPlugin({
+    //   filename: cssFilename,
+    // }),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
     // having to parse `index.html`.
@@ -339,4 +335,8 @@ module.exports = {
     tls: 'empty',
     child_process: 'empty',
   },
+  externals : {
+      react: 'React',
+      'react-dom': 'ReactDOM'
+  }
 };
