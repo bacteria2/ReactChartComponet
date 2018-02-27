@@ -16,8 +16,8 @@
         background: #0f2067;
       }
       #echarts{
+        height: calc(50vh - 220px);
         width: 400px;
-        height:400px;
       }
     </style>
     <script src="react.development.js"></script>
@@ -61,14 +61,15 @@
     fixed: 2    
     });
    setInterval(function(){
-     rollingNumber.update(Math.random()*1000)
+     rollingNumber.method('update',Math.random()*1000)
     },5000) 
-   let charts=Toolkit.Charts()
-   charts
-   .then(charts=>charts.init(document.getElementById('echarts')))
-   .then(instance=>instance.setOption({
+   let charts=Toolkit.asyncCharts(document.getElementById('echarts'),{
+   //  style:{height:600,width:600},
+  //   id:'testCharts'
+   })
+   charts.invoke('setOption',{
        title: {
-           text: 'ECharts 入门示例'
+           text: 'ECharts 示例'
        },
        tooltip: {},
        legend: {
@@ -83,7 +84,7 @@
            type: 'bar',
            data: [5, 20, 36, 10, 10, 20]
        }]
-   }))
+   })  
   
   
      let gauge=Toolkit.Gauge(document.getElementById('big'),{
@@ -94,7 +95,7 @@
        value:10,
      })
     // gauge.update(0.1)
-     setInterval(function(){gauge.update(100*Math.random())},5000)
+     setInterval(function(){gauge.method('update',100*Math.random())},5000)
 
     //timeAxis 
     let timeAxis =Toolkit.TimeAxis(document.getElementById('timeAxis'),{

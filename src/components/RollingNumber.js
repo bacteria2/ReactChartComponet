@@ -299,7 +299,7 @@ class RollingNumber extends React.PureComponent {
            
             list.push(
                   <Dot 
-                     commonStyle={commonStyle} 
+                     commonStyle={commonStyle} background={commonStyle.background} height={commonStyle.height} width={commonStyle.width}
                      key="dot" />)
             
             for (let i = 0; i < this.props.fixed; i++) {
@@ -313,8 +313,7 @@ class RollingNumber extends React.PureComponent {
     }
 
     render() {
-        let commonStyle=this.mergeStyle(this.props.style,this.props.size)
-        console.log(commonStyle);
+        let commonStyle=this.mergeStyle(this.props.style,this.props.size)      
         return (
             <div>
                 {this.digitGenerator(this.props.length, this.props.fixed,commonStyle)}
