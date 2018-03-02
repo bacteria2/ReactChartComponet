@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import RollingNumber from './components/RollingNumber';
-import TimeAxis from './components/TimeAxis';
-import Gauge from './components/Gauge';
+import RollingNumber from './RollingNumber';
+import TimeAxis from './TimeAxis';
+import Gauge from './Gauge';
 
 
 function hocConnect(Component){
@@ -52,7 +52,7 @@ export default class RcToolkit{
 }
 
 const asyncCompList={
-    Echarts:import (/* webpackChunkName: "asyncCharts" */ './components/Echarts'),
+    Echarts:import (/* webpackChunkName: "asyncCharts" */ './Echarts'),
 }
 
 export class AsyncToolKit{

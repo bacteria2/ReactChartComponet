@@ -1,4 +1,4 @@
-import RcToolkit,{AsyncToolKit} from './ReactTool';
+import RcToolkit,{AsyncToolKit} from './components/index';
 import Pie from './components/Pie/index';
 
 export default  class Toolkit {
