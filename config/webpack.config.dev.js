@@ -223,7 +223,7 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             inject: true,
-            file: 'visualView.html',
+            filename: 'visualView.html',
             template: 'public/visualView.example.html',
         }),
         // Add module names to factory functions so they appear in browser profiler.
